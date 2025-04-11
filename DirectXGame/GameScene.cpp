@@ -1,8 +1,23 @@
 #include "GameScene.h"
 using namespace KamataEngine;
 
-void GameScene::Initialize() {}
+//初期化
+void GameScene::Initialize() 
+{
+	// 3Dモデルデータの生成
+	modelParticle_ = Model::CreateSphere(4, 4);
 
-void GameScene::Update() {}
+	//3Dモデルデータの開放
+	delete modelParticle_;
+}
+//更新
+void GameScene::Update() 
+{
 
-void GameScene::Draw() {}
+}
+
+//描画
+void GameScene::Draw() 
+{
+
+}

@@ -1,5 +1,7 @@
 #pragma once
 #include"KamataEngine.h"
+
+using namespace KamataEngine;
 class GameScene 
 {
 public:
@@ -10,4 +12,11 @@ public:
 
 	//描画
 	void Draw();
+
+	//パーティクル3Dモデルデータ
+	Model* modelParticle_ = nullptr;
+	
+
+private:
+
 };
