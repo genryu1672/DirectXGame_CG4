@@ -13,6 +13,9 @@ public:
 	//描画
 	void Draw();
 	
+	//デストラクタ
+	~GameScene();
+
 	//カメラ
 	Camera camera_;
 

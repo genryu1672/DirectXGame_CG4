@@ -2,6 +2,15 @@
 
 using namespace KamataEngine;
 
+//デストラクタ
+GameScene::~GameScene() {
+	// 3Dモデルデータの開放
+	delete modelParticle_;
+
+	// パーティクルの開放
+	delete particle_;
+}
+
 //初期化
 void GameScene::Initialize() 
 {
@@ -14,13 +23,7 @@ void GameScene::Initialize()
 	// パーティクルの生成
 	particle_ = new Particle();
 	// パーティクルの初期化
-	particle_->Initialize();
-
-	//3Dモデルデータの開放
-	delete modelParticle_;
-
-	// パーティクルの開放
-	delete particle_;
+	particle_->Initialize(modelParticle_);
 }
 //更新
 void GameScene::Update() 
