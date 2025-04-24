@@ -1,6 +1,6 @@
 #pragma once
 #include"KamataEngine.h"
-
+#include"Particle.h"
 using namespace KamataEngine;
 class GameScene 
 {
@@ -12,13 +12,13 @@ public:
 
 	//描画
 	void Draw();
-
-	//パーティクル3Dモデルデータ
-	Model* modelParticle_ = nullptr;
 	
 	//カメラ
 	Camera camera_;
 
 private:
-
+	// パーティクル3Dモデルデータ
+	Model* modelParticle_ = nullptr;
+	// パーティクル
+	Particle* particle_ = nullptr;
 };
