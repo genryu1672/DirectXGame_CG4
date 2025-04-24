@@ -16,9 +16,10 @@ void Particle::Update()
 	worldTransform_.TransferMatrix();
 }
 
-void Particle::Draw() 
+void Particle::Draw(Camera& camera) 
 {
-	
+	//3Dモデルを描画
+	model_->Draw(worldTransform_, camera);
 }
 
 

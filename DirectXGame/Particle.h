@@ -10,7 +10,7 @@ public:
 	//更新
 	void Update();
 	//描画
-	void Draw();
+	void Draw(Camera& camera);
 	
 private://メンバ変数（アンダーバーがついてるやつが引数として受け取ったデータをメンバ変数に記録する事ができる）
 	//ワールド変換データ
