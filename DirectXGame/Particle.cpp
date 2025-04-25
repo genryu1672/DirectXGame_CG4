@@ -1,6 +1,9 @@
 #include "Particle.h"
 #include "GameScene.h"
 #include"cassert"
+
+using namespace MathUtility;
+
 void Particle::Initialize(Model* model) {
 	//NULLポインタチェック①
 	assert(model);
@@ -15,10 +18,14 @@ void Particle::Initialize(Model* model) {
 
 void Particle::Update() 
 {
-	//行列を定数バッファに転送
-	worldTransform_.TransferMatrix();
 	//色変更オブジェクトに色の数値を設定する
 	objectColor_.SetColor(color_);
+	//移動
+	worldTransform_.translation_ += {0.0f, 0.1f, 0.0f};
+	// 行列を定数バッファに転送
+	//worldTransform_.TransferMatrix();
+	//行列を更新
+	worldTransform_.UpdateMatrix();
 }
 
 void Particle::Draw(Camera& camera) 
