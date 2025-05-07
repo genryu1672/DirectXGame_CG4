@@ -33,7 +33,7 @@ void GameScene::Initialize()
 		//位置
 		Vector3 position = {0.5f * i, 0.0f, 0.0f};
 		// パーティクルの初期化(自キャラ)
-		particle_->Initialize(modelParticle_, position);
+		particle->Initialize(modelParticle_, position);
 		//リストに追加
 		particles_.push_back(particle);
 	}
