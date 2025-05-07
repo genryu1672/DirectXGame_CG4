@@ -8,7 +8,11 @@ GameScene::~GameScene() {
 	delete modelParticle_;
 
 	// パーティクルの開放
-	delete particle_;
+	for (Particle* particle : particles_)
+	{
+		delete particle;
+	}
+	particles_.clear();
 }
 
 //初期化
@@ -20,19 +24,31 @@ void GameScene::Initialize()
 	//カメラの初期化
 	camera_.Initialize();
 
-	// パーティクルの生成
-	particle_ = new Particle();
-	
-	//位置
-	Vector3 position = {0.0f, 0.0f, 0.0f};
-	// パーティクルの初期化(自キャラ)
-	particle_->Initialize(modelParticle_,position);
+	//元々のやつparticle_ = new Particle();
+	//  パーティクルの生成
+	for (int i = 0; i < 150; i++)
+	{
+		//生成
+		Particle* particle = new Particle();
+		//位置
+		Vector3 position = {0.5f * i, 0.0f, 0.0f};
+		// パーティクルの初期化(自キャラ)
+		particle_->Initialize(modelParticle_, position);
+		//リストに追加
+		particles_.push_back(particle);
+	}
+
+	//変更前の位置
+	//Vector3 position = {0.0f, 0.0f, 0.0f};
 }
 //更新
 void GameScene::Update() 
 {
 	// パーティクルの更新
-	particle_->Update();
+	for (Particle* particle: particles_)
+	{
+		particle->Update();
+	}
 }
 
 //描画
@@ -43,7 +59,10 @@ void GameScene::Draw()
 	//3Dモデル描画前処理
 	Model::PreDraw(dxCommon->GetCommandList());
 	// パーティクルの描画
-	particle_->Draw(camera_);
+	for (Particle* particle : particles_)
+	{
+		particle->Draw(camera_);
+	}
 	//3Dモデル描画後処理
 	Model::PostDraw();
 }

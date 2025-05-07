@@ -18,7 +18,8 @@ public:
 
 	//カメラ
 	Camera camera_;
-	std::list<Particle> particles_;
+	//変数の複数化
+	std::list<Particle*> particles_;
 
 private:
 	// パーティクル3Dモデルデータ
