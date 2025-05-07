@@ -22,8 +22,11 @@ void GameScene::Initialize()
 
 	// パーティクルの生成
 	particle_ = new Particle();
-	// パーティクルの初期化
-	particle_->Initialize(modelParticle_);
+	
+	//位置
+	Vector3 position = {0.0f, 0.0f, 0.0f};
+	// パーティクルの初期化(自キャラ)
+	particle_->Initialize(modelParticle_,position);
 }
 //更新
 void GameScene::Update() 

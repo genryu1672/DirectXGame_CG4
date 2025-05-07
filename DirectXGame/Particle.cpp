@@ -4,7 +4,7 @@
 
 using namespace MathUtility;
 
-void Particle::Initialize(Model* model) {
+void Particle::Initialize(Model* model, Vector3 position) {
 	//NULLポインタチェック①
 	assert(model);
 	//引数として受け取ったデータをメンバ変数に記録する②
@@ -14,6 +14,8 @@ void Particle::Initialize(Model* model) {
 	//色の設定
 	objectColor_.Initialize();
 	color_ = {1, 1, 0, 1};
+
+	worldTransform_.translation_ = position;
 }
 
 void Particle::Update() 

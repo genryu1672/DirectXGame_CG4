@@ -18,6 +18,7 @@ public:
 
 	//カメラ
 	Camera camera_;
+	std::list<Particle> particles_;
 
 private:
 	// パーティクル3Dモデルデータ
