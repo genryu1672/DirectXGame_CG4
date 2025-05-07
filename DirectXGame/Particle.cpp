@@ -19,6 +19,8 @@ void Particle::Initialize(Model* model, Vector3 position, Vector3 velocity) {
 
 	//受け取った移動量をメンバ変数に代入する
 	velocity_ = velocity;
+	//大きさ
+	modelParticle_ = {0.2f, 0.2f, 0.2f};
 }
 
 void Particle::Update() 

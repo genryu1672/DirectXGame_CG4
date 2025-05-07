@@ -1,7 +1,7 @@
 #include "GameScene.h"
 #include<random>
 using namespace KamataEngine;
-
+using namespace MathUtility;
 //グローバル
 std::random_device seedGenerator;
 std::mt19937 randomEngine(seedGenerator());
@@ -42,6 +42,10 @@ void GameScene::Initialize()
 		particle->Initialize(modelParticle_, position, velocity);
 		//リストに追加
 		particles_.push_back(particle);
+		//動きの調整
+		Normalize(velocity);
+		velocity *= distribution(randomEngine);
+		velocity *= 0.1f;
 	}
 
 	//変更前の位置
