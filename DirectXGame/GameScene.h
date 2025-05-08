@@ -20,6 +20,8 @@ public:
 	Camera camera_;
 	//変数の複数化
 	std::list<Particle*> particles_;
+	// パーティクル発生
+	void ParticleBorn(Vector3 position);
 
 private:
 	// パーティクル3Dモデルデータ

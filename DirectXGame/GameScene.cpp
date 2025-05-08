@@ -19,6 +19,8 @@ GameScene::~GameScene() {
 	particles_.clear();
 }
 
+
+
 //初期化
 void GameScene::Initialize() 
 {
@@ -28,32 +30,41 @@ void GameScene::Initialize()
 	//カメラの初期化
 	camera_.Initialize();
 
-	//元々のやつparticle_ = new Particle();
+	//乱数の初期化
+	srand((unsigned)time(NULL));
+}
+
+void GameScene::ParticleBorn(Vector3 position) {
 	//  パーティクルの生成
-	for (int i = 0; i < 150; i++)
-	{
-		//生成
+	for (int i = 0; i < 150; i++) {
+		// 生成
 		Particle* particle = new Particle();
-		//位置
-		Vector3 position = {0.0, 0.0f, 0.0f};//0.5f * i, 0.0f, 0.0f
-		//移動量
+		// 位置
+		//Vector3 position = {0.0, 0.0f, 0.0f}; // 0.5f * i, 0.0f, 0.0f
+		// 移動量
 		Vector3 velocity = {distribution(randomEngine), distribution(randomEngine), 0};
 		// パーティクルの初期化(自キャラ)
 		particle->Initialize(modelParticle_, position, velocity);
-		//リストに追加
+		// リストに追加
 		particles_.push_back(particle);
-		//動きの調整
+		// 動きの調整
 		Normalize(velocity);
 		velocity *= distribution(randomEngine);
 		velocity *= 0.1f;
 	}
-
-	//変更前の位置
-	//Vector3 position = {0.0f, 0.0f, 0.0f};
 }
+
 //更新
 void GameScene::Update() 
 {
+	// 確率で発生
+	if (rand() % 20 == 0) {
+		// 発生位置は乱数
+		Vector3 position = {distribution(randomEngine) * 30.0f, distribution(randomEngine) * 20.0f, 0};
+		/// パーティクルの発生
+		ParticleBorn(position);
+	}
+	
 	// パーティクルの更新
 	for (Particle* particle: particles_)
 	{
@@ -67,7 +78,7 @@ void GameScene::Update()
 			return true;
 		}
 		return false;
-	});
+	});	
 }
 
 //描画

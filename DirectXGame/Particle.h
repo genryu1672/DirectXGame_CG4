@@ -11,7 +11,6 @@ public:
 	void Update();
 	//描画
 	void Draw(Camera& camera);
-	
 	// デスフラグのgetter
 	bool IsFinished() { return isFinished_; }
 
