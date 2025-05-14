@@ -92,7 +92,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		}
 		assert(false);
 	}
-	//
+	
 	//PSO(PipelineStateObject)の生成
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPiplineStateDesc{};
 	graphicsPiplineStateDesc.pRootSignature = rootSignature;//RootSignature
