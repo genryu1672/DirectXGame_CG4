@@ -23,7 +23,7 @@ private://メンバ変数（アンダーバーがついてるやつが引数と�
 	KamataEngine::ObjectColor objectColor_;
 	//色の数値
 	KamataEngine::Vector4 color_;
-	//移動量
+	//移動量	
 	KamataEngine::Vector3 velocity_;
 	//終了フラグ
 	bool isFinished_ = false;
