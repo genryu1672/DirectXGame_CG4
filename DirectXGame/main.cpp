@@ -173,7 +173,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	hr = dxCommon->GetDevice()->CreateGraphicsPipelineState(
 		&graphicsPiplineStateDesc,IID_PPV_ARGS(&graphicsPiplineState));
 	assert(SUCCEEDED(hr));
-
+	
 	//VertexResourceの生成
 	//頂点リソース用のヒープの設定
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
