@@ -75,7 +75,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	ID3DBlob* errorBlob = nullptr;//エラーオブジェクト
 
 	//頂点シェーダの読み込みとコンパイル
-	std::wstring vsFile = L"Resource/shaders/TestVS.hlsl";
+	std::wstring vsFile = L"Resources/shaders/TestVS.hlsl";
 	hr = D3DCompileFromFile(
 	    vsFile.c_str(), // シェーダファイル名
 	    nullptr,
@@ -93,6 +93,25 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		assert(false);
 	}
 	
+	//ピクセルシェーダの読み込みとコンパイル
+	std::wstring psFile = L"Resources/shaders/TestPS.hlsl";
+	hr = D3DCompileFromFile(
+	    psFile.c_str(), // シェーダファイル名
+	    nullptr,
+	    D3D_COMPILE_STANDARD_FILE_INCLUDE,               // インクルード可能にする
+	    "main", "ps_5_0",                                // エントリーポイント名、シェーダモデル指定
+	    D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // デバック用設定
+	    0, &psBlob, &errorBlob);
+	if (FAILED(hr))
+	{
+		DebugText::GetInstance()->ConsolePrintf(std::system_category().message(hr).c_str());
+		if (errorBlob)
+		{
+			DebugText::GetInstance()->ConsolePrintf(reinterpret_cast<char*>(errorBlob->GetBufferPointer()));
+		}
+		assert(false);
+	}
+
 	//PSO(PipelineStateObject)の生成
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPiplineStateDesc{};
 	graphicsPiplineStateDesc.pRootSignature = rootSignature;//RootSignature
