@@ -150,7 +150,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	// ピクセルシェーダの読み込みとコンパイル
 	ID3DBlob* psBlob = CompileShader(L"Resources/shaders/TestPS.hlsl", "ps_5_0");
 	assert(psBlob != nullptr);
-
+	
 	//PSO(PipelineStateObject)の生成
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPiplineStateDesc{};
 	graphicsPiplineStateDesc.pRootSignature = rootSignature;//RootSignature
