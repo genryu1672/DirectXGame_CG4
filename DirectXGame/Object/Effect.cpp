@@ -34,7 +34,7 @@ void Effect::Update() {
 	if (isFinished_) {
 		return;
 	}
-
+	
 	// 存在時間の上限に達したら
 	if (counter_ >= kDuration) {
 		counter_ = kDuration;
