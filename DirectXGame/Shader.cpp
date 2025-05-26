@@ -27,6 +27,17 @@ void Shader::Load(const std::wstring& filePath, const std::wstring& shaderModel)
 	}
 	// 生成したshaderBlobを返す
 	blob_= shaderBlob;
+	//wstring=>string文字列変換
+	std::string mbShaderModel = mbShaderModel;//←考えて見ようの部分
+	//Shaderのコンパイル
+	HRESULT hr = D3DCompileFromFile(
+	filePath.c_str(),//シェーダーファイル名
+	nullptr,
+	D3D_COMPILE_STANDARD_FILE_INCLUDE,//インクルード可能にする
+	"main",mbShaderModel.c_str(),//エントリーポイント名、シェーダモデル指定（←考えてみようの部分）
+	D3DCOMPILE_DEBUG|D3DCOMPILE_SKIP_OPTIMIZATION,//デバック用設定
+	0,&shaderBlob,&errorBlob
+	);
 }
 
 //コンパイル済みのシェーダーデータを返す　※未コンパイルの場合はnullptrとなる
