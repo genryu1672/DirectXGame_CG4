@@ -33,7 +33,7 @@ void Shader::Load(const std::wstring& filePath, const std::wstring& shaderModel)
 	// wstring=>string文字列変換
 	std::string mbShaderModel = mbShaderModel; // ←考えて見ようの部分
 	// Shaderのコンパイル
-	HRESULT hr = D3DCompileFromFile(
+	 hr = D3DCompileFromFile(
 	    filePath.c_str(), // シェーダーファイル名
 	    nullptr,
 	    D3D_COMPILE_STANDARD_FILE_INCLUDE,               // インクルード可能にする
