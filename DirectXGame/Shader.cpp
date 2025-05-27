@@ -11,7 +11,7 @@ void Shader::Load(const std::wstring& filePath, const std::wstring& shaderModel)
 	ID3DBlob* shaderBlob = nullptr;
 	ID3DBlob* errorBlob = nullptr;
 
-	std::string mdShaderModel = ConvertString(shaderModel);
+	std::string mdShaderModel = MiscUtility::ConvertString(shaderModel);
 
 	HRESULT hr = D3DCompileFromFile(
 	    filePath.c_str(), // シェーダファイル名
