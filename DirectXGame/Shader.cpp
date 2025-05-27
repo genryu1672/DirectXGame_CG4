@@ -147,7 +147,7 @@ Shader::~Shader()
 	}
 	if (dxcBlob_!=nullptr)
 	{
-		dxcblob_->Release();
+		dxcBlob_->Release();
 		dxcBlob_ = nullptr;
 	}
 }
