@@ -4,6 +4,7 @@
 #include<d3dcompiler.h>//dxcapi.hが依存している
 #include<dxcapi.h>//IDxcBlobを利用するため
 
+
 class Shader {
 public:
 	//シェーダファイルを読み込み、コンパイル済みデータを生成する
