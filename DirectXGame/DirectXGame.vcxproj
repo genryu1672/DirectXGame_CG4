@@ -78,9 +78,13 @@
       <ShaderModel>5.0</ShaderModel>
     </FxCompile>
     <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
       <Command>copy"$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll"
 copy"$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxill.dll"  "$(TargetDir)dxil.dll"</Command>
-    </PreBuildEvent>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -109,9 +113,13 @@ copy"$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxill.dll"  "$(TargetDir)d
       <ShaderModel>5.0</ShaderModel>
     </FxCompile>
     <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
       <Command>copy"$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll"
 copy"$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxill.dll"  "$(TargetDir)dxil.dll"</Command>
-    </PreBuildEvent>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameScene.cpp" />

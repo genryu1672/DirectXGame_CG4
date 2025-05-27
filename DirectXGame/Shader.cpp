@@ -2,20 +2,22 @@
 #include<cassert>
 #include<d3dcompiler.h>
 #include<dxcapi.h>
+#include "MiscUtility.h"
 #pragma comment(lib, "dxcompiler.lib")
 // シェーダコンパイル関数
 // filePath:シェーダファイルのパス　例 L"Resources/shaders/TestVS.hlsl"
 // shaderModel:シェーダモデル　　例　"vs_5.0"
-void Shader::Load(const std::wstring& filePath, const std::wstring& shaderModel) 
-{
+void Shader::Load(const std::wstring& filePath, const std::wstring& shaderModel) {
 	ID3DBlob* shaderBlob = nullptr;
 	ID3DBlob* errorBlob = nullptr;
+
+	std::string mdShaderModel = ConvertString(shaderModel);
 
 	HRESULT hr = D3DCompileFromFile(
 	    filePath.c_str(), // シェーダファイル名
 	    nullptr,
 	    D3D_COMPILE_STANDARD_FILE_INCLUDE,               // インクルード可能にする
-	    "main", shaderModel.c_str(),                     // エントリーポイント名、シェーダモデル指定
+	    "main", mdShaderModel.c_str(),                   // エントリーポイント名、シェーダモデル指定
 	    D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // デバック用設定
 	    0, &shaderBlob, &errorBlob);
 	// エラーが発生した場合、止める
@@ -27,21 +29,20 @@ void Shader::Load(const std::wstring& filePath, const std::wstring& shaderModel)
 		assert(false);
 	}
 	// 生成したshaderBlobを返す
-	blob_= shaderBlob;
-	//wstring=>string文字列変換
-	std::string mbShaderModel = mbShaderModel;//←考えて見ようの部分
-	//Shaderのコンパイル
+	blob_ = shaderBlob;
+	// wstring=>string文字列変換
+	std::string mbShaderModel = mbShaderModel; // ←考えて見ようの部分
+	// Shaderのコンパイル
 	HRESULT hr = D3DCompileFromFile(
-	filePath.c_str(),//シェーダーファイル名
-	nullptr,
-	D3D_COMPILE_STANDARD_FILE_INCLUDE,//インクルード可能にする
-	"main",mbShaderModel.c_str(),//エントリーポイント名、シェーダモデル指定（←考えてみようの部分）
-	D3DCOMPILE_DEBUG|D3DCOMPILE_SKIP_OPTIMIZATION,//デバック用設定
-	0,&shaderBlob,&errorBlob
-	);
+	    filePath.c_str(), // シェーダーファイル名
+	    nullptr,
+	    D3D_COMPILE_STANDARD_FILE_INCLUDE,               // インクルード可能にする
+	    "main", mbShaderModel.c_str(),                   // エントリーポイント名、シェーダモデル指定（←考えてみようの部分）
+	    D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // デバック用設定
+	    0, &shaderBlob, &errorBlob);
 }
 
-void Shader::LoadDxc(const std::wstring& filePath, const std::wstring& shadermodel) 
+void Shader::LoadDxc(const std::wstring& filePath, const std::wstring& shaderModel) 
 {
 	//DXC(DirectX Shader Compiler)を初期化
 	static IDxcUtils* dxcUtils = nullptr;

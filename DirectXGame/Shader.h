@@ -19,5 +19,5 @@ public:
 	
 private:
 	ID3DBlob* blob_ = nullptr;//コンパイル済みのシェーダーデータ＆コンストラクタで初期化しなくていい　※C++11以降
-	IDxcBlob* dxblob_ = nullptr;//コンパイル済みのシェーダーデータ ※外部コンパイル版
+	IDxcBlob* dxcblob_ = nullptr;//コンパイル済みのシェーダーデータ ※外部コンパイル版
 };
