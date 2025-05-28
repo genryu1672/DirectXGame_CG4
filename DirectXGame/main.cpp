@@ -4,6 +4,7 @@
 #include"Shader.h"
 #include"RootSignature.h"
 #include"PipelineState.h"
+#include"VertexBuffer.h"
 //#include<d3dcompiler.h>
 //グローバル関数
 using namespace KamataEngine;
@@ -52,42 +53,46 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	SetupPipelineState(pipelineState, rs, vs, ps);
 
 	//VertexResourceの生成
-	//頂点リソース用のヒープの設定
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//CPUから書き込むヒープ
-	//頂点リソースの設定
-	D3D12_RESOURCE_DESC vertexResourceDesc{};
-	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;//バッファ
-	vertexResourceDesc.Width = sizeof(Vector4) * 3;//リソースのサイズ。今回はVector4を３頂点分
-	//バッファの場合はこれらは1にする決まり
-	vertexResourceDesc.Height = 1;
-	vertexResourceDesc.DepthOrArraySize = 1;
-	vertexResourceDesc.MipLevels = 1;
-	vertexResourceDesc.SampleDesc.Count = 1;
-	//バッファの場合はこれにする決まり
-	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	//実際に頂点リソースを生成する
-	ID3D12Resource* vertexResource = nullptr;
-	HRESULT hr = dxCommon->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexResource));
-	assert(SUCCEEDED(hr));//うまくいかなかったときは起動できない
+	////頂点リソース用のヒープの設定
+	//D3D12_HEAP_PROPERTIES uploadHeapProperties{};
+	//uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//CPUから書き込むヒープ
+	////頂点リソースの設定
+	//D3D12_RESOURCE_DESC vertexResourceDesc{};
+	//vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;//バッファ
+	//vertexResourceDesc.Width = sizeof(Vector4) * 3;//リソースのサイズ。今回はVector4を３頂点分
+	////バッファの場合はこれらは1にする決まり
+	//vertexResourceDesc.Height = 1;
+	//vertexResourceDesc.DepthOrArraySize = 1;
+	//vertexResourceDesc.MipLevels = 1;
+	//vertexResourceDesc.SampleDesc.Count = 1;
+	////バッファの場合はこれにする決まり
+	//vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	////実際に頂点リソースを生成する
+	//ID3D12Resource* vertexResource = nullptr;
+	//HRESULT hr = dxCommon->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexResource));
+	//assert(SUCCEEDED(hr));//うまくいかなかったときは起動できない
 
 	//VertexBufferViewを作成する
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
-	//リソースの先頭アドレスから使う
-	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
-	//使用するリソースのサイズは頂点３つ分のサイズ
-	vertexBufferView.SizeInBytes = sizeof(Vector4) * 3;
-	//1つの頂点のサイズ
-	vertexBufferView.StrideInBytes = sizeof(Vector4);
-	
+	//D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
+	////リソースの先頭アドレスから使う
+	//vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
+	////使用するリソースのサイズは頂点３つ分のサイズ
+	//vertexBufferView.SizeInBytes = sizeof(Vector4) * 3;
+	////1つの頂点のサイズ
+	//vertexBufferView.StrideInBytes = sizeof(Vector4);
+
+	//VertexBuffer(VertexResource,VertexResourceView)の生成
+	VertexBuffer vb;
+	vb.Create(sizeof(Vector4) * 3, sizeof(Vector4));
+
 	//頂点リソースにデータを書き込む
 	Vector4* vertexData = nullptr;
-	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
+	vb.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 	vertexData[0] = {-0.5f, -0.5f, 0.0f, 1.0f};//左下
 	vertexData[1] = {0.0f, 0.5f, 0.0f, 1.0f}; //上
 	vertexData[2] = {0.5f, -0.5f, 0.0f, 1.0f}; // 右下
 	//頂点リソースのマップを解除する
-	vertexResource->Unmap(0, nullptr);
+	vb.Get()->Unmap(0, nullptr);
 
 	//メインループ
 	while (true) {
@@ -104,7 +109,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		//コマンドを詰む
 		commandList->SetGraphicsRootSignature(rs.Get());//RootSignatureの設定
 		commandList->SetPipelineState(pipelineState.Get());//PSOの設定をする
-		commandList->IASetVertexBuffers(0, 1, &vertexBufferView);//VBVの設定をする
+		commandList->IASetVertexBuffers(0, 1, vb.GetView());//VBVの設定をする
 		//トポロジの設定
 		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		//頂点数、インデックス数、インデックスの開始位置、インデックスのオフセット
@@ -124,7 +129,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	gameScene = nullptr;
 
 	//解放処理
-	vertexResource->Release();
+	//vertexResource->Release();
 	
 	//エンジンの終了処理
 	KamataEngine::Finalize();
