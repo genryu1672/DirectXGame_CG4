@@ -164,7 +164,7 @@ void SetupPipelineState(PipelineState& pipelineState, RootSignature& rs, Shader&
 	graphicsPiplineStateDesc.PS = {ps.GetDxcBlob()->GetBufferPointer(), ps.GetDxcBlob()->GetBufferSize()}; // PixelShader
 	graphicsPiplineStateDesc.BlendState = blendDesc;                                                       // BlendState
 	graphicsPiplineStateDesc.RasterizerState = rasterizerDesc;                                             // RasterizerState
-
+	
 	// 書き込むRTVの情報
 	graphicsPiplineStateDesc.NumRenderTargets = 1; // 1つのRTVに書き込む　※２つ同時にしようと思えば出来る
 	graphicsPiplineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
