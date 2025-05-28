@@ -1,5 +1,6 @@
 #include "RootSignature.h"
 #include"KamataEngine.h"//DirectXCommon
+#include "PipelineState.h"
 
 using namespace KamataEngine;
 
@@ -37,8 +38,7 @@ void RootSignature::Create()
 	rootSignature_ = rootSignature;
 }
 
-ID3D12RootSignature* RootSignature::Get() 
-{ 
+ID3D12RootSignature* RootSignature::Get() { 
 	return rootSignature_; 
 }
 
