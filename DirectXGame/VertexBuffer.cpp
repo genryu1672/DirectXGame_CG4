@@ -19,7 +19,7 @@ void VertexBuffer::Create(const UINT size, const UINT stride)
 	// 頂点リソースの設定
 	D3D12_RESOURCE_DESC vertexResourceDesc{};
 	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER; // バッファ
-	vertexResourceDesc.Width = sizeof(Vector4) * 3;                 // リソースのサイズ。今回はVector4を３頂点分
+	vertexResourceDesc.Width = size;// リソースのサイズ。今回はVector4を３頂点分　　☆頂点リソースの全サイズ
 	// バッファの場合はこれらは1にする決まり
 	vertexResourceDesc.Height = 1;
 	vertexResourceDesc.DepthOrArraySize = 1;
@@ -41,7 +41,7 @@ void VertexBuffer::Create(const UINT size, const UINT stride)
 	// 使用するリソースのサイズは頂点３つ分のサイズ
 	vertexBufferView.SizeInBytes = sizeof(Vector4) * 3;
 	// 1つの頂点のサイズ
-	vertexBufferView.StrideInBytes = sizeof(Vector4);
+	vertexBufferView.StrideInBytes = stride;//☆頂点1つ分のサイズ（元sizeof(Vector4)）
 
 	//VertexBufferViewを取っておく
 	vertexBufferView_ = vertexBufferView;
