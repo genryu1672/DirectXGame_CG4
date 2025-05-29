@@ -2,7 +2,7 @@
 using namespace KamataEngine;
 #include <random>
 using namespace MathUtility;
-
+#include<cassert>
 void Effect::Initialize(KamataEngine::Model* model, KamataEngine::Vector3 pos, KamataEngine::Vector4 color) {
 	std::random_device seed_Generator;
 	std::mt19937 RandomEngine(seed_Generator());
