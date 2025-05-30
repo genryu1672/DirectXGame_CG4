@@ -1,4 +1,5 @@
 #pragma once
+#include "Model2.h"
 #include"KamataEngine.h"
 class GameScene 
 {
@@ -10,4 +11,6 @@ public:
 
 	//描画
 	void Draw();
+private:
+
 };
