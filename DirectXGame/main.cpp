@@ -5,6 +5,7 @@
 #include"RootSignature.h"
 #include"PipelineState.h"
 #include"VertexBuffer.h"
+#include "IndexBuffer.h"
 //#include<d3dcompiler.h>
 //グローバル関数
 using namespace KamataEngine;
@@ -79,6 +80,23 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		pGpuVertices[i] = vertices[i];
 	}
 
+	//頂点インデックスデータの準備---------★00_07で追加
+	uint16_t indices[]=
+	{
+		0,1,2,
+	};
+
+	//IndexBuffer(IndexResource,IndexResourceView)の生成
+	IndexBuffer ib;
+	ib.Create(sizeof(indices), sizeof(indices[0]));
+	//頂点インデックスリソースにデータを書き込む
+	uint16_t* pGpuIndices = nullptr;
+	ib.Get()->Map(0, nullptr, reinterpret_cast<void**>(&pGpuIndices));
+
+	for (int i = 0; i < _countof(indices); ++i)
+	{
+		pGpuIndices[i] = indices[i];
+	}
 
 	//メインループ
 	while (true) {
@@ -96,10 +114,12 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		commandList->SetGraphicsRootSignature(rs.Get());//RootSignatureの設定
 		commandList->SetPipelineState(pipelineState.Get());//PSOの設定をする
 		commandList->IASetVertexBuffers(0, 1, vb.GetView());//VBVの設定をする
+		commandList->IASetIndexBuffer(ib.GetView());//★IBVを設定する
 		//トポロジの設定
 		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		//頂点数、インデックス数、インデックスの開始位置、インデックスのオフセット
-		commandList->DrawInstanced(3, 1, 0, 0);
+		//commandList->DrawInstanced(3, 1, 0, 0);
+		commandList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
 
 		// 描画処理
 		gameScene->Draw();
