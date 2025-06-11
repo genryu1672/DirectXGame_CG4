@@ -61,11 +61,15 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	};
 	// 頂点データの準備　★00_07で追加
 	VertexData vertices[] = {
-	    {0.0f,  0.5f,  0.0f, 1.0f}, //  上
-	    {0.5f,  -0.5f, 0.0f, 1.0f}, //  右下
+	    {0.0f, 0.5f, 0.0f, 1.0f}, //  上
+	    {0.5f, -0.5f, 0.0f, 1.0f}, //  右下
 	    {-0.5f, -0.5f, 0.0f, 1.0f}, //  左下
 	};
-
+	
+	// {0.0f,  0.5f,  0.0f, 1.0f}, //  上
+	//{0.5f,  -0.5f, 0.0f, 1.0f}, //  右下
+	//{-0.5f, -0.5f, 0.0f, 1.0f}, //  左下
+	
 	//VertexBuffer(VertexResource,VertexResourceView)の生成
 	VertexBuffer vb;
 	//vb.Create(sizeof(Vector4) * 3, sizeof(Vector4));
