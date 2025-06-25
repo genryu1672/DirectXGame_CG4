@@ -10,10 +10,17 @@
 // グローバル関数
 using namespace KamataEngine;
 
-// 関数プロトタイプ宣言
+// 関数プロトタイプ宣言-----------------------------
+//PipelineStateObjectの生成
 void SetupPipelineState(PipelineState& pipelineState, RootSignature& rs, Shader& vs, Shader& ps);
 
-// Windowsアプリでのエントリーポイント(main関数)
+//RenderTextureResourceの生成
+ID3D12Resource* CreateRenderTextureResource(ID3D12Device* device, uint32_t width, uint32_t height, DXGI_FORMAT format, const FLOAT* clearColor);
+
+//DepthStencilTextureResourceの生成
+ID3D12Resource* CreateDepthStencilTextureResource(ID3D12Device* device, int32_t width, int32_t height);
+
+    // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	////エンジンの初期化
@@ -96,6 +103,49 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	for (int i = 0; i < _countof(indices); ++i) {
 		pGpuIndices[i] = indices[i];
 	}
+
+	//Resource生成、Heap生成、View生成で再利用される変数の準備-------------------
+	ID3D12Device* device = dxCommon->GetDevice();
+	
+	//RenderTexture関係　★00_09追加
+	//0.RenderTextureResourceの作成
+	//画面クリア色　※分かりやすいように赤とする
+	const FLOAT kRenderTargetClearColor[4] = {1.0f, 0.0f, 0.0f, 1.0f};
+	ID3D12Resource* renderTextureResource = CreateRenderTextureResource(
+		device,WinApp::kWindowWidth,WinApp::kWindowHeight,
+		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,kRenderTargetClearColor
+	);
+	//1.RTV用のDescriptorHeapを作成する-----------------------------------
+	ID3D12DescriptorHeap* rtvDescriptorHeap = nullptr;
+	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc{};
+	rtvDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;//RTV
+	rtvDescriptorHeapDesc.NumDescriptors = 1;//Descriptorの個数は１
+	
+	HRESULT hr;//資料に載ってないから追加した（１０ページ）
+	hr = device->CreateDescriptorHeap(&rtvDescriptorHeapDesc, IID_PPV_ARGS(&rtvDescriptorHeap));
+	assert(SUCCEEDED(hr));
+
+	//CPU側からみたHANDLEを取得しておく
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandleCPU = rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+
+	//2.RTV用のViewの生成
+	device->CreateRenderTargetView(
+	    renderTextureResource, // Viewと関連付けたいリソース
+	    nullptr,               // RTVの詳細情報(Desc:Description、構成内容の記述)
+	                           // ※RTVの場合nullptrするとDirectX12が自動で推測してくれる
+	    rtvHandleCPU // RTV用ディスクリプタヒープのCPU Handle
+	);
+
+
+
+
+
+
+
+
+
+
+
 
 	// メインループ
 	while (true) {
@@ -186,4 +236,48 @@ void SetupPipelineState(PipelineState& pipelineState, RootSignature& rs, Shader&
 	graphicsPiplineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
 	// 準備は整った。PSOを生成する
 	pipelineState.Create(graphicsPiplineStateDesc);
+}
+
+//RenderTextureResourceの生成
+ID3D12Resource* CreateRenderTextureResource(ID3D12Device* device, uint32_t width, uint32_t height, DXGI_FORMAT format, const FLOAT* clearColor) 
+{
+	//1.生成するRenderTextureのDescの設定
+	D3D12_RESOURCE_DESC resourceDesc{};
+	resourceDesc.Width = UINT(width);//RenderTextureの幅
+	resourceDesc.Height = UINT(height);//Textureの高さ
+	resourceDesc.MipLevels = 1;//mipmapの数
+	resourceDesc.DepthOrArraySize = 1;//奥行or配列Textureの配列数
+	resourceDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;//TextureのFormat
+	resourceDesc.SampleDesc.Count = 1;//サンプリングカウント１固定
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;//Textureの時限数。普段使っているのは２次元
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;//RenderTargetとして使う通知
+	//2.利用するHeapの設定
+	D3D12_HEAP_PROPERTIES heapProperties{};
+	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;//VRAM上に作る
+
+	//3.ClearValueの用意
+	D3D12_CLEAR_VALUE clearValue{};
+	clearValue.Format = format;//ページ６（一応資料にはclearFormatってある）
+	clearValue.Color[0] = clearColor[0];
+	clearValue.Color[1] = clearColor[1];
+	clearValue.Color[2] = clearColor[2];
+	clearValue.Color[3] = clearColor[3];
+
+	//4.RenderTextureResourceの生成
+	ID3D12Resource* resource = nullptr;
+	HRESULT hr = device->CreateCommittedResource(
+	    &heapProperties,                            // Heapの設定
+	    D3D12_HEAP_FLAG_NONE,                       // Heapの特殊な設定
+	    &resourceDesc,                              // Resourceの設定
+	    D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, // PixelShaderでアクセス出来るようにする
+	    &clearValue,                                // Clear最適値
+	    IID_PPV_ARGS(&resource)                     // 作成するResourceポインタへのポインタ
+	);
+	assert(SUCCEEDED(hr));
+	return resource;
+}
+
+ID3D12Resource* CreateDepthStencilTextureResource(ID3D12Device* device, int32_t width, int32_t height) 
+{
+	//1.生成するDepthStencilTextureのDesc
 }
