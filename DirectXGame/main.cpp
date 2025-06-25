@@ -136,17 +136,6 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	    rtvHandleCPU // RTV用ディスクリプタヒープのCPU Handle
 	);
 
-
-
-
-
-
-
-
-
-
-
-
 	// メインループ
 	while (true) {
 		// エンジンの更新
@@ -280,4 +269,37 @@ ID3D12Resource* CreateRenderTextureResource(ID3D12Device* device, uint32_t width
 ID3D12Resource* CreateDepthStencilTextureResource(ID3D12Device* device, int32_t width, int32_t height) 
 {
 	//1.生成するDepthStencilTextureのDesc
+	D3D12_RESOURCE_DESC resourceDesc{};
+	resourceDesc.Width = width;//Textureの幅
+	resourceDesc.Height = height;//Textureの高さ
+	resourceDesc.MipLevels = 1;//mipmapの数DepthStencilなので１つでいい
+	resourceDesc.DepthOrArraySize = 1;//Textureの配列数DepthStencilは１つでいい
+	resourceDesc.Format = DXGI_FORMAT_D32_FLOAT;//DepthStencilとして利用可能なフォーマット
+	//※KamataEngineと合わせる
+	resourceDesc.SampleDesc.Count = 1;//サンプリングカウント１固定
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;//2次元
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;//DepthStencilとして使う通知
+	
+	//2.利用するHeapの設定
+	D3D12_HEAP_PROPERTIES heapProperties{};
+	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;//VARM上に作る
+
+	//深度値のクリア設定
+	D3D12_CLEAR_VALUE depthClearValue{};
+	depthClearValue.DepthStencil.Depth = 1.0f;//1.0f(最大値)でクリア
+	depthClearValue.Format = DXGI_FORMAT_D32_FLOAT;//Zバッファ形式、resourceと合わせる　※KamataEngineと合わせた
+	
+	//3.Resourceの生成
+	ID3D12Resource* resource = nullptr;
+	HRESULT hr = device->CreateCommittedResource(
+	    &heapProperties,                  // Heapの設定
+	    D3D12_HEAP_FLAG_NONE,             // Heapの特殊な設定　★後で変更？
+	    &resourceDesc,                    // Resourceの設定
+	    D3D12_RESOURCE_STATE_DEPTH_WRITE, // 深度値を書き込み状態にしておく
+	    &depthClearValue,                 // Clear最適値
+	    IID_PPV_ARGS(&resource)           // 作成するResourceポインタへのポインタ
+	);
+	assert(SUCCEEDED(hr));
+
+	return resource;
 }
