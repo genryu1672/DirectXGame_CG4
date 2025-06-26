@@ -206,8 +206,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;//TranslationBarrierの設定
 		barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;//フラグはNoneにしておく
 		barrier.Transition.pResource = renderTextureResource;//バリアを張る対象のリソース
-		barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;//遷移前
-		barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;//遷移後
+		barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET; // 遷移前
+		barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE; // 遷移後
 		commandList->ResourceBarrier(1, &barrier);//バリアを張る
 		
 		//描画先のRTVとDSVを設定する
