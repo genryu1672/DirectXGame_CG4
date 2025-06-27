@@ -45,8 +45,24 @@ Model2* Model2::CreateFromOBJ(const std::string& modelname, bool smoothing) {
 	// メモリ確保
 	Model2* instance = new Model2;
 	instance->InitializeFromFile(modelname, smoothing);
-
+	
 	return instance;
+}
+
+// 四角形
+Model2* Model2::CreateSquare() {
+	// メモリ確保
+	Model2* instance = new Model2;
+	std::vector<Mesh::VertexPosNormalUv> vertices;
+	std::vector<uint32_t> indices;
+
+	// 頂点数
+	const uint32_t kNumVertices = 4;
+	// インデックス数
+	const uint32_t kNumIndices = 6;
+
+	vertices.resize(kNumVertices);
+	indices.resize(kNumIndices);
 }
 
 Model2* Model2::CreateSphere(uint32_t divisionVertial, uint32_t divisionHorizontal) {
