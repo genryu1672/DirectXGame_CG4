@@ -9,16 +9,22 @@ GameScene::~GameScene() {
 
 	// パーティクルの開放
 	delete particle_;
+
+	// 四角形
+	Model2::StaticFinalize();
 }
 
 //初期化
 void GameScene::Initialize() 
 {
 	// 3Dモデルデータの生成
-	modelParticle_ = Model::CreateSphere(4, 4);
+	modelParticle_ = Model2::CreateSphere(4, 4);
 	
 	//カメラの初期化
 	camera_.Initialize();
+
+	//四角形の初期化
+	Model2::StaticInitialize();
 
 	// パーティクルの生成
 	particle_ = new Particle();
@@ -38,9 +44,9 @@ void GameScene::Draw()
 	//DirectXCommonインスタンスの取得
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 	//3Dモデル描画前処理
-	Model::PreDraw(dxCommon->GetCommandList());
+	Model2::PreDraw(dxCommon->GetCommandList());
 	// パーティクルの描画
 	particle_->Draw(camera_);
 	//3Dモデル描画後処理
-	Model::PostDraw();
+	Model2::PostDraw();
 }

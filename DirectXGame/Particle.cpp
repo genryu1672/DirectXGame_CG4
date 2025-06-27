@@ -1,7 +1,8 @@
 #include "Particle.h"
 #include "GameScene.h"
 #include"cassert"
-void Particle::Initialize(Model* model) {
+
+void Particle::Initialize(Model2* model) {
 	//NULLポインタチェック①
 	assert(model);
 	//引数として受け取ったデータをメンバ変数に記録する②
