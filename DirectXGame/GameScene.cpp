@@ -13,7 +13,7 @@ GameScene::~GameScene() {
 	// 四角形
 	Model2::StaticFinalize();
 }
-//////////
+
 //初期化
 void GameScene::Initialize() 
 {
