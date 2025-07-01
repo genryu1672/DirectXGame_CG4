@@ -45,6 +45,14 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	// RootSignature作成-------------------
 	RootSignature rs;
 	rs.Create();
+	
+	//デスクリプタレンジ
+	D3D12_DESCRIPTOR_RANGE srvDescRange[1]{};
+	//t0レジスタを利用可能にする
+	srvDescRange[0].BaseShaderRegister = 0;
+	srvDescRange[0].NumDescriptors = 1;
+	srvDescRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	srvDescRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	// 頂点シェーダの読み込みとコンパイル
 	Shader vs;
@@ -198,8 +206,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		}
 		// ゲームシーンの更新
 		gameScene->Update();
-		// 描画開始
-		dxCommon->PreDraw();
+		
 
 		//TransitionBarrierをSRV⇒RTVに設定する
 		D3D12_RESOURCE_BARRIER barrier{};
@@ -239,31 +246,33 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		//指定した深度で画面全体をクリアする
 		commandList->ClearDepthStencilView(dsvHandleCPU, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
-
+		// 描画開始
+		dxCommon->PreDraw();
 
 		// コマンドを詰む
 		commandList->SetGraphicsRootSignature(rs.Get());     // RootSignatureの設定
 		commandList->SetPipelineState(pipelineState.Get());  // PSOの設定をする
 		commandList->IASetVertexBuffers(0, 1, vb.GetView()); // VBVの設定をする
 		commandList->IASetIndexBuffer(ib.GetView());         // ★IBVを設定する
-		
+		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);// トポロジの設定
+
 		//使用するディスクリプタヒープの設定　★00_09で追加
 		commandList->SetDescriptorHeaps(srvDescriptorHeap->GetDesc().NumDescriptors, &srvDescriptorHeap);
 		
 		//SRVのDescriptorTableの先頭を設定　※０はrootParameter[0]である　★00_09で追加		
-		commandList->SetGraphicsRootDescriptorTable(0, srvHandleGPU);
+		commandList->SetGraphicsRootDescriptorTable(0,srvHandleGPU);
 
-		// トポロジの設定
-		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		
 		// 頂点数、インデックス数、インデックスの開始位置、インデックスのオフセット
 		// commandList->DrawInstanced(3, 1, 0, 0);
+		//画面を覆うポリゴンの描画
 		commandList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
+		// 描画終了
+		dxCommon->PostDraw();
 
 		// 描画処理
 		gameScene->Draw();
 
-		// 描画終了
-		dxCommon->PostDraw();
 	}
 
 	// ゲームシーンの開放

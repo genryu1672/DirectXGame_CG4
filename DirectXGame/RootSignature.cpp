@@ -64,9 +64,6 @@ void RootSignature::Create()
 	descriptionRootSignature.pStaticSamplers = staticSamplers;
 	descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers);
 
-
-
-
 	// バイナリをもとに生成
 	ID3D12RootSignature* rootSignature = nullptr;
 	hr = dxCommon->GetDevice()->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
