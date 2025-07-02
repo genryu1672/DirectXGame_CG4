@@ -1,5 +1,4 @@
 #pragma once
-#include "C:\Users\k023g\Downloads\KamataEngine20250327\External\KamataEngine\include\3d\WorldTransform.h"
 #include"KamataEngine.h"
 class WorldTransformEx : public KamataEngine::WorldTransform 
 {

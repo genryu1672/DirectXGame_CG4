@@ -14,7 +14,7 @@ void WorldTransformEx::UpdateMatrix()
 	TransferMatrix();
 }
 
-KamataEngine::Matrix4x4 WorldTransformEx::MakeAffineMatrix() 
+Matrix4x4 WorldTransformEx::MakeAffineMatrix() 
 {
 	//Scale Matrix
 	Matrix4x4 matScale = MakeScaleMatrix(scale_);
@@ -31,5 +31,5 @@ KamataEngine::Matrix4x4 WorldTransformEx::MakeAffineMatrix()
 	//World Matrix
 	Matrix4x4 matWorld = matScale * matRot * matTrans;
 
-	return matWorld_; 
+	return matWorld; 
 }
