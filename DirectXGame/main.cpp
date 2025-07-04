@@ -18,6 +18,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	//ゲームシーンの初期化
 	gameScene->Initialize();
 
+
 	//メインループ
 	while (true) {
 		//エンジンの更新
@@ -25,6 +26,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		{
 			break;
 		}
+
 		// ゲームシーンの更新
 		gameScene->Update();
 		// 描画開始
