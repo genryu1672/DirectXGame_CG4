@@ -1,6 +1,5 @@
 #pragma once
 #include"KamataEngine.h"
-#include "KamataEngine/Sprite.h" // Sprite クラスの定義があるヘッダー
 class GameScene 
 {
 public:
