@@ -23,6 +23,4 @@ private:
 
 	//スプライト
 	KamataEngine::Sprite* sprite_ = nullptr;
-	//スプライトインスタンスの生成
-	sprite_ = Sprite::Create(textureHandle_, {1280, 720});
 };
