@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include <cmath> // sin関数に必要
 using namespace KamataEngine;
 
 GameScene::GameScene() {}
@@ -17,15 +18,26 @@ void GameScene::Initialize() {
 	sprite_ = Sprite::Create(textureHandle_, {0, 0});
 }
 
+// メンバー変数に追加
+int frameCount = 0;
+
 void GameScene::Update() 
 {
 	//スプライトの今の座標を取得
-	Vector2 position = sprite_->GetPosition();
-	//座標を｛２，１｝移動
-	position.x += 2.0f;
-	position.y += 1.0f;
-	//移動した座標をスプライトに反映
-	sprite_->SetPosition(position);
+	//Vector2 position = sprite_->GetPosition();
+	////座標を｛２，１｝移動
+	//position.x += 2.0f;
+	//position.y += 1.0f;
+	////移動した座標をスプライトに反映
+	//sprite_->SetPosition(position);
+
+	frameCount++;
+
+	// sin波で上下に揺れるY座標を作る（±10ピクセル範囲で動かす）
+	float y = 10 * sin(frameCount * 0.05f);
+
+	// スプライトの位置を更新
+	sprite_->SetPosition({0.0f, y});
 }
 
 void GameScene::Draw() 
@@ -36,7 +48,11 @@ void GameScene::Draw()
 	Sprite::PreDraw(dxCommon->GetCommandList());
 	
 	//スプライトインスタンスの描画処理
-	sprite_->Draw();
+	if(frameCount % 60 >= 30) 
+	{
+		sprite_->Draw();
+	}
+	
 
 	//スプライト描画後処理
 	Sprite::PostDraw();
