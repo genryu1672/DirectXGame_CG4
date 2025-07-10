@@ -15,8 +15,9 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("Title.png");
 	textureHandle_ = TextureManager::Load("Stage.png");
 	// スプライトインスタンスの生成
-	sprite_ = Sprite::Create(textureHandle_, {0, 0});
+	sprite_ = Sprite::Create(textureHandle_, {0, 0});//タイトル
 
+	//ステージ背景
 	stage_ = new Stage();
 	stage_->Initialize(textureHandle_);
 	
@@ -55,12 +56,13 @@ void GameScene::Draw()
 	//スプライト描画前処理
 	Sprite::PreDraw(dxCommon->GetCommandList());
 	
-	//スプライトインスタンスの描画処理
+	//スプライトインスタンスの描画処理（タイトル）
 	//if(frameCount % 60 >= 30) 
 	//{
 	//	sprite_->Draw();
 	//}
 	
+	//ステージ背景
 	stage_->Draw();
 
 	//スプライト描画後処理
