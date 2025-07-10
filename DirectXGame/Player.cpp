@@ -2,7 +2,12 @@
 using namespace KamataEngine;
 
 //初期化
-void Player::Initialize(Model* model) {}
+void Player::Initialize(uint32_t textureHandle)
+{
+	textureHandle_=textureHandle;
+
+	//プレイヤーの生成
+}
 
 //更新
 void Player::Update() {}
