@@ -7,6 +7,8 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	// デストラクタ
 	delete sprite_;
+	delete stage_;
+	delete camera_;
 }
 
 void GameScene::Initialize() {
@@ -21,6 +23,15 @@ void GameScene::Initialize() {
 	stage_ = new Stage();
 	stage_->Initialize(textureHandle_);
 	
+
+	// カメラ生成・初期化
+	camera_ = new Camera();
+	camera_->Initialize();
+
+
+	modelPlayer_ = Model::CreateFromOBJ("player", true);
+	player_ = new Player();
+	player_->Initialize(modelPlayer_, camera_, {0, 0, 0});
 }
 
 // メンバー変数に追加
@@ -36,6 +47,7 @@ void GameScene::Update() {
 	//position.y += 1.0f;
 	////移動した座標をスプライトに反映
 	//sprite_->SetPosition(position);
+	player_->Update();
 
 	frameCount++;
 
@@ -46,25 +58,41 @@ void GameScene::Update() {
 	sprite_->SetPosition({0.0f, y});
 
 	stage_->Update();
+	
 
 }
 
 void GameScene::Draw() 
 {
-	//DirectXCommonインスタンスの取得
+	// DirectXCommonインスタンスの取得
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
-	//スプライト描画前処理
+	// スプライト描画前処理(背景)
 	Sprite::PreDraw(dxCommon->GetCommandList());
+
 	
-	//スプライトインスタンスの描画処理（タイトル）
-	//if(frameCount % 60 >= 30) 
-	//{
-	//	sprite_->Draw();
-	//}
+	// スプライトインスタンスの描画処理
 	
-	//ステージ背景
+	sprite_->Draw();
+	
 	stage_->Draw();
 
-	//スプライト描画後処理
+	// スプライト描画後処理(背景)
+	Sprite::PostDraw();
+
+	// 深度バッファクリア
+	dxCommon->ClearDepthBuffer();
+	// 3Dモデル描画前処理
+	Model::PreDraw(dxCommon->GetCommandList());
+
+	
+	player_->Draw();
+
+	// 3Dモデル描画後処理
+	Model::PostDraw();
+
+	// スプライト描画前処理(2D近景)
+	Sprite::PreDraw(dxCommon->GetCommandList());
+
+	// スプライト描画後処理(背景)
 	Sprite::PostDraw();
 }
